@@ -13,6 +13,11 @@ DELTA = {
     }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+# 加速度リストと爆弾のサイズリストを作成
+saccs = [a for a in range(1, 11)]  # 1から10までの加速度リスト
+bb_imgs = [pg.Surface((20 * r, 20 * r), pg.SRCALPHA) for r in range(1, 11)]  # 爆弾のSurfaceを生成
+for r in range(1, 11):
+    pg.draw.circle(bb_imgs[r-1], (255, 0, 0), (10 * r, 10 * r), 10 * r)  # 各爆弾を赤い円で描画
 
 
 def game_over_screen(screen: pg.Surface, kk_img: pg.Surface):
@@ -41,6 +46,7 @@ def game_over_screen(screen: pg.Surface, kk_img: pg.Surface):
     # 画面を更新して5秒間停止
     pg.display.update()
     time.sleep(5)
+
 
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
 
@@ -104,9 +110,7 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-
         
-
         bb_rct.move_ip((vx,vy))
         yoko, tate = check_bound(bb_rct)
         if not yoko:
