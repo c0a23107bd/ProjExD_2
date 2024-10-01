@@ -2,6 +2,7 @@ import os
 import sys
 import pygame as pg
 import random
+import time
 
 WIDTH, HEIGHT = 1100, 650
 DELTA = {
@@ -12,6 +13,32 @@ DELTA = {
     }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def game_over_screen(screen: pg.Surface, kk_img: pg.Surface):
+    """
+    ゲームオーバー画面を表示する関数。
+    Args:
+        screen (pg.Surface): ゲーム画面
+        kk_img (pg.Surface): 泣いているこうかとんの画像
+    """
+    # 画面をブラックアウト
+    screen.fill((0, 0, 0))
+    
+    # 半透明の黒いオーバーレイを描画
+    overlay = pg.Surface((WIDTH, HEIGHT))
+    overlay.set_alpha(128)  # 半透明度の設定
+    screen.blit(overlay, (0, 0))
+    
+    # "Game Over" テキストを表示
+    font = pg.font.Font(None, 74)
+    text = font.render("Game Over", True, (255, 0, 0))  # 赤色のテキスト
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    screen.blit(text, text_rect)
+    # 泣いているこうかとんの画像を表示
+    kk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 0.9)
+    screen.blit(kk_img, (WIDTH // 2 - kk_img.get_width() // 2, HEIGHT // 2 + 50))
+    # 画面を更新して5秒間停止
+    pg.display.update()
+    time.sleep(5)
 
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
 
@@ -52,7 +79,10 @@ def main():
         if kk_rct.colliderect(bb_rct):
             # こうかとんと爆弾が重なっていたら
             print("GameOver")
+            game_over_screen(screen, kk_img)
             return
+
+    
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         # if key_lst[pg.K_UP]:
