@@ -13,6 +13,8 @@ DELTA = {
     }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+
+
 def game_over_screen(screen: pg.Surface, kk_img: pg.Surface):
     """
     ゲームオーバー画面を表示する関数。
@@ -102,6 +104,8 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
+
+        
 
         bb_rct.move_ip((vx,vy))
         yoko, tate = check_bound(bb_rct)
